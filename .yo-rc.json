@@ -1,0 +1,19 @@
+{
+  "generator-fountain-angular2": {
+    "version": "1.0.0",
+    "props": {
+      "resolved": "C:\\Users\\MARQUES\\AppData\\Roaming\\npm\\node_modules\\generator-fountain-angular2\\generators\\app\\index.js",
+      "namespace": "fountain-angular2:app",
+      "_": [],
+      "framework": "angular2",
+      "modules": "webpack",
+      "js": "typescript",
+      "css": "scss",
+      "ci": [
+        "travis"
+      ],
+      "sample": "techs",
+      "router": "router"
+    }
+  }
+}
