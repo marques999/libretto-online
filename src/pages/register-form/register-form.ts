@@ -22,10 +22,10 @@ export class RegisterFormComponent {
    * @memberOf RegisterFormComponent
    */
   public userForm: UserForm = {
-    name: '',
-    email: '',
-    password: '',
-    location: '',
+    Name: '',
+    Email: '',
+    Password: '',
+    Location: '',
   };
 
   /**
@@ -39,7 +39,11 @@ export class RegisterFormComponent {
    * @memberOf RegisterFormComponent
    */
   private registerAccount(formData: NgForm): void {
-    console.log(formData);
-    // this.userApi.insert(formData.value as UserForm);
+    console.log(this.userForm);
+    delete this.userForm.Password;
+    this.userApi.register(this.userForm).subscribe(
+      resp => console.log(resp),
+      error => console.log(error)
+    );
   }
 }

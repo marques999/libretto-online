@@ -18,6 +18,8 @@ import {
 
 import 'rxjs/add/operator/map';
 
+import { Constants } from '../../globals';
+
 /**
  * @export
  * @class BookApi
@@ -30,14 +32,14 @@ export class BookApi {
    * @param {Http} api
    * @memberOf BookApi
    */
-  public constructor( @Inject(Http) private api: Http) { }
+  public constructor( @Inject(Http) private api: Http, private CONSTANTS : Constants) { }
 
   /**
    * @returns {Observable<any>}
    * @memberOf BookApi
    */
   public getAll(): Observable<Book[]> {
-    return this.api.get('/api/book').map(r => r.json());
+    return this.api.get(this.CONSTANTS.getAPIEndpoint() + 'books').map(r => r.json());
   }
 
   /**

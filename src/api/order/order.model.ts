@@ -3,14 +3,16 @@
  * @type Order
  */
 export type Order = {
-  id: string,
-  book: string,
-  total: number,
-  customer: string,
-  quantity: number,
-  status: string,
-  timestamp: Date,
-  lastUpdate: Date
+  Id: string,
+  BookId: string,
+  BookTitle: string,
+  CustomerId: string,
+  CustomerName: string,
+  Quantity: number,
+  Timestamp: string,
+  Total: number,
+  Status: number,
+  StatusTimestamp: string,
 };
 
 /**
@@ -18,8 +20,18 @@ export type Order = {
  * @type OrderForm
  */
 export type OrderForm = {
-  id: string,
   bookId: string,
   quantity: number,
-  customerId: string
+  customerId: string,
+  customerName: string,
+  bookTitle: string,
+  total: number
+};
+
+/**
+ * @export
+ * @type OrderId
+ */
+export type OrderId = {
+  Id: string
 };

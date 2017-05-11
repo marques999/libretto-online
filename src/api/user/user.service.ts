@@ -14,10 +14,13 @@ import {
 
 import {
   User,
-  UserForm
+  UserForm,
+  LoginForm
 } from './user.model';
 
 import 'rxjs/add/operator/map';
+
+import { Constants } from '../../globals';
 
 /**
  * @export
@@ -39,7 +42,7 @@ export class UserApi {
    * @param {Http} api
    * @memberOf UserApi
    */
-  public constructor( @Inject(Http) private api: Http) { }
+  public constructor( @Inject(Http) private api: Http, private CONSTANTS: Constants) { }
 
   /**
    * @param {string} id
@@ -56,12 +59,12 @@ export class UserApi {
    * @returns {Observable<any>}
    * @memberOf UserApi
    */
-  public authenticate(username: string, password: string): Observable<any> {
+  public authenticate(loginCredentials : LoginForm): Observable<any> {
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
-    return this.api.post(UserApi.ENDPOINT, JSON.stringify({
-      username: username,
-      password: password
+    return this.api.post(this.CONSTANTS.getAPIEndpoint() + 'auth/login', JSON.stringify({
+      Email: loginCredentials.Email,
+      Password: loginCredentials.Password
     }), { headers }).map(r => r.json());
   }
 
@@ -70,10 +73,10 @@ export class UserApi {
    * @returns {Observable<any>}
    * @memberOf UserApi
    */
-  public insert(userInformation: UserForm): Observable<User> {
+  public register(userInformation: UserForm): Observable<User> {
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
-    return this.api.put(UserApi.ENDPOINT, JSON.stringify(userInformation), {
+    return this.api.post(this.CONSTANTS.getAPIEndpoint() + 'customers/add' , JSON.stringify(userInformation), {
       headers
     }).map(r => r.json());
   }

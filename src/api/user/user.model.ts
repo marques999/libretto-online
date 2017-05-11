@@ -5,7 +5,8 @@
 export type User = {
   email: string,
   location: string,
-  fullName: string
+  fullName: string,
+  id: string,
 };
 
 /**
@@ -13,8 +14,13 @@ export type User = {
  * @type UserForm
  */
 export type UserForm = {
-  name: string,
-  email: string,
-  location: string,
-  password: string
+  Name: string,
+  Email: string,
+  Location: string,
+  Password: string
+};
+
+export type LoginForm = {
+  Email: string,
+  Password: string,
 };

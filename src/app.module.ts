@@ -14,6 +14,12 @@ import { LibrettoComponent } from './app.component';
 import { HeaderComponent } from './components/header';
 import { FooterComponent } from './components/footer';
 
+import { Constants, UserConstants } from './globals';
+
+import { Ng2Bs3ModalModule } from '../node_modules/ng2-bs3-modal/ng2-bs3-modal';
+
+import { LocalStorageModule } from '../node_modules/angular-2-local-storage';
+
 import {
   HomepageRouting,
   HomepageComponent
@@ -44,13 +50,20 @@ import {
     RegisterFormRouting,
     TransactionsRouting,
     AlertModule.forRoot(),
-    ModalModule.forRoot()
+    ModalModule.forRoot(),
+    Ng2Bs3ModalModule,
+    LocalStorageModule.withConfig({
+      prefix: 'my-app',
+      storageType: 'localStorage'
+    })
   ],
   providers: [
     BookApi,
     UserApi,
     OrderApi,
-    PurchaseApi
+    PurchaseApi,
+    Constants,
+    UserConstants
   ],
   declarations: [
     EqualValidator,

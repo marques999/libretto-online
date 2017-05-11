@@ -8,6 +8,18 @@ import {
   BookApi
 } from '../../api/book';
 
+import {
+  Order,
+  OrderForm,
+  OrderApi
+} from '../../api/order';
+
+import { ModalComponent } from 'ng2-bs3-modal/ng2-bs3-modal';
+
+import { ViewChild } from '@angular/core';
+
+import { UserConstants } from '../../globals';
+
 /**
  * @export
  * @class HomepageComponent
@@ -19,49 +31,43 @@ import {
 })
 export class HomepageComponent implements OnInit {
 
+   @ViewChild('modal') modal: ModalComponent;
+
   /**
    * @private
    * @type {Book[]}
    * @memberOf HomepageComponent
    */
-  private books: Book[] = [{
-    id: '1',
-    stock: 3,
-    price: 24.99,
-    title: 'First Product'
-  }, {
-    id: '2',
-    stock: 3,
-    price: 64.99,
-    title: 'Second Product'
-  }, {
-    id: '3',
-    stock: 3,
-    price: 74.99,
-    title: 'Third Product'
-  }, {
-    id: '4',
-    stock: 3,
-    price: 84.99,
-    title: 'Fourth Product'
-  }, {
-    id: '5',
-    stock: 3,
-    price: 94.99,
-    title: 'Fifth Product'
-  }, {
-    id: '6',
-    stock: 3,
-    price: 54.99,
-    title: 'Sixth Product'
-  }];
+  private books: Book[] = [];
+
+  private selectedBook : Book = {
+      Title : '',
+      Id: '',
+      Stock: 0,
+      Price: 0
+  };
+
+  private order : OrderForm = {
+    bookId: '',
+    quantity: 1,
+    customerId: '',
+    bookTitle : '',
+    customerName : '',
+    total: 0
+  }
+
+  private misc = {
+    price : 0
+  }
 
   /**
    * Creates an instance of HomepageComponent.
    * @param {BookApi} bookApi
    * @memberOf HomepageComponent
    */
-  constructor(private bookApi: BookApi) { }
+  constructor(private bookApi: BookApi,
+              private userConstants: UserConstants,
+              private orderApi : OrderApi) { }
 
   /**
    * @memberOf TodoComponent
@@ -75,8 +81,27 @@ export class HomepageComponent implements OnInit {
    * @memberOf HomepageComponent
    */
   private refreshBooks(): void {
-    this.bookApi.getAll().subscribe((books: Book[]) => {
-      this.books = books;
+    this.bookApi.getAll().subscribe((books: any ) => {
+      this.books = books.GetBooksListResult;
     });
+  }
+
+  openModal(selectedBook: Book) {
+      this.selectedBook = selectedBook;
+      this.order.bookId = selectedBook.Id;
+      this.order.bookTitle = selectedBook.Title;
+      this.misc.price = selectedBook.Price;
+      this.order.customerName = this.userConstants.getUser().fullName;
+      this.order.customerId = this.userConstants.getUser().id;
+      this.modal.open();
+  }
+
+  submitOrder(): void {
+    console.log(this.order);
+    this.order.total = this.misc.price * this.order.quantity;
+    this.orderApi.insert(this.order).subscribe(
+      resp => this.modal.close(),
+      error => console.log(error)
+    );
   }
 }
