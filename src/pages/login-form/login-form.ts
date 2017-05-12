@@ -1,16 +1,20 @@
-import { Component } from '@angular/core';
+import {
+  Component
+} from '@angular/core';
 
 import {
+   Router
+} from '@angular/router';
+
+import {
+  User,
   UserApi,
-  LoginForm,
-  User
+  LoginForm
 } from '../../api/user';
 
 import {
   UserConstants
-} from '../../globals';
-
-import { Router } from '@angular/router';
+} from '../../api/globals';
 
 /**
  * @export
@@ -23,24 +27,34 @@ import { Router } from '@angular/router';
 export class LoginFormComponent {
 
   /**
+   * @private
+   * @type {LoginForm}
+   * @memberof LoginFormComponent
+   */
+  private loginForm: LoginForm = {
+    Email : '',
+    Password: ''
+  };
+
+  /**
    * Creates an instance of LoginFormComponent.
    * @param {UserApi} userApi
    * @memberOf LoginFormComponent
    */
-  public constructor(private userApi: UserApi, private user : UserConstants, private router : Router) { }
+  public constructor(
+    private router: Router,
+    private userApi: UserApi,
+    private userConstants: UserConstants
+  ) { }
 
-  private loginForm : LoginForm = {
-    Email : '',
-    Password: ''
-  }
-
+  /**
+   * @memberof LoginFormComponent
+   */
   public doLogin(): void {
     this.userApi.authenticate(this.loginForm).subscribe(
       resp => {
-        this.user.setUser(resp.Email, resp.Location, resp.Name, resp.Id);
-
-        this.user.userLoggedIn = true;
-
+        this.userConstants.setUser(resp.Email, resp.Location, resp.Name, resp.Id);
+        this.userConstants.userLoggedIn = true;
         this.router.navigate(['/books']);
       },
       error => console.log(error)

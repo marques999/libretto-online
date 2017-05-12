@@ -18,9 +18,11 @@ import {
   OrderId
 } from './order.model';
 
-import 'rxjs/add/operator/map';
+import {
+  Constants
+} from '../globals';
 
-import { Constants } from '../../globals';
+import 'rxjs/add/operator/map';
 
 /**
  * @export
@@ -42,33 +44,38 @@ export class OrderApi {
    * @param {Http} api
    * @memberOf OrderApi
    */
-  public constructor( @Inject(Http) private api: Http, private CONSTANTS : Constants) { }
+  public constructor( @Inject(Http) private api: Http, private CONSTANTS: Constants) { }
 
   /**
-   * @returns {Observable<any>}
-   * @memberOf OrderApi
+   * @returns {Observable<Order[]>}
+   * @memberof OrderApi
    */
   public getAll(): Observable<Order[]> {
     return this.api.get(this.CONSTANTS.getAPIEndpoint() + 'orders').map(r => r.json());
   }
 
-  public getOrdersByUser(id : string): Observable<Order[]>{
+  /**
+   * @param {string} id
+   * @returns {Observable<Order[]>}
+   * @memberof OrderApi
+   */
+  public getOrdersByUser(id: string): Observable<Order[]>{
     return this.api.get(this.CONSTANTS.getAPIEndpoint() + 'order/user/' + id).map(r => r.json());
   }
 
   /**
-   * @param {string} id
-   * @returns {Observable<any>}
-   * @memberOf OrderApi
+   * @param {string} orderId
+   * @returns {Observable<Order>}
+   * @memberof OrderApi
    */
   public getById(orderId: string): Observable<Order> {
     return this.api.get(OrderApi.ENDPOINT.replace(/:id/, orderId)).map(r => r.json());
   }
 
   /**
-   * @param {string} message
-   * @returns {Observable<any>}
-   * @memberOf OrderApi
+   * @param {OrderForm} orderInformation
+   * @returns {Observable<Order>}
+   * @memberof OrderApi
    */
   public insert(orderInformation: OrderForm): Observable<Order> {
     const headers = new Headers();
@@ -79,13 +86,13 @@ export class OrderApi {
   }
 
   /**
-   * @param {string} id
+   * @param {OrderId} orderId
    * @returns {Observable<any>}
-   * @memberOf OrderApi
+   * @memberof OrderApi
    */
-  public remove(order: OrderId): Observable<any> {
+  public remove(orderId: OrderId): Observable<any> {
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
-    return this.api.post(this.CONSTANTS.getAPIEndpoint() + 'orders/delete', JSON.stringify(order), {headers}).map(r => r.json());
+    return this.api.post(this.CONSTANTS.getAPIEndpoint() + 'orders/delete', JSON.stringify(orderId), {headers}).map(r => r.json());
   }
 }

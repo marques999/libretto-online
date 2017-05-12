@@ -5,11 +5,13 @@ import {
 
 import {
   Order,
-  OrderApi,
-  OrderId
+  OrderId,
+  OrderApi
 } from '../../api/order/';
 
-import { UserConstants } from '../../globals';
+import {
+  UserConstants
+} from '../../api/globals';
 
 /**
  * @export
@@ -29,13 +31,14 @@ export class TransactionsComponent implements OnInit {
    */
   private orders: Order[];
 
+
   /**
    * Creates an instance of TransactionsComponent.
    * @param {OrderApi} orderApi
-   * @param {PurchaseApi} purchaseApi
-   * @memberOf TransactionsComponent
+   * @param {UserConstants} userInfo
+   * @memberof TransactionsComponent
    */
-  public constructor(private orderApi: OrderApi, private userInfo : UserConstants) { }
+  public constructor(private orderApi: OrderApi, private userInfo: UserConstants) { }
 
   /**
    * @memberOf TodoComponent
@@ -49,46 +52,41 @@ export class TransactionsComponent implements OnInit {
    * @memberOf TransactionsComponent
    */
   private refreshOrders(): void {
-    this.orderApi.getOrdersByUser(this.userInfo.getUser().id).subscribe( (orders : any) => {
+    this.orderApi.getOrdersByUser(this.userInfo.getUser().id).subscribe((orders: any) => {
       this.orders = orders;
-
-      this.orders.map(elem => {
-        let epochDate = elem.Timestamp.split('+')[0].substring(6);
-        let epochStatusDate = elem.StatusTimestamp.split('+')[0].substring(6);
-
+      this.orders.map(orderInformation => {
+        let epochDate = orderInformation.Timestamp.split('+')[0].substring(6);
+        let epochStatusDate = orderInformation.StatusTimestamp.split('+')[0].substring(6);
         let date = new Date(parseInt(epochDate));
         let statusDate = new Date(parseInt(epochStatusDate));
-
-        elem.Timestamp = date.toISOString();
-
-        elem.StatusTimestamp = statusDate.toISOString();
+        orderInformation.Timestamp = date.toISOString();
+        orderInformation.StatusTimestamp = statusDate.toISOString();
       });
-    }, error => console.log(error));
+    }, errorInformation => console.log(errorInformation));
   }
 
-
+  /**
+   * @private
+   * @param {Order} order
+   * @memberof TransactionsComponent
+   */
   private cancelOrder(order: Order): void{
-
-    let arg : OrderId = {
+    let arg: OrderId = {
       Id : order.Id
     }
     this.orderApi.remove(arg).subscribe(
-      resp => {
-        this.orders = resp;
-
+      orderInformation => {
+        this.orders = orderInformation;
         this.orders.map(elem => {
           let epochDate = elem.Timestamp.split('+')[0].substring(6);
           let epochStatusDate = elem.StatusTimestamp.split('+')[0].substring(6);
-
           let date = new Date(parseInt(epochDate));
           let statusDate = new Date(parseInt(epochStatusDate));
-
           elem.Timestamp = date.toISOString();
-
           elem.StatusTimestamp = statusDate.toISOString();
         });
       },
-      error => console.log(error)
+      errorInformation => console.log(errorInformation)
     )
   }
 }

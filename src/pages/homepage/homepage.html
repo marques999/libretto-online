@@ -26,30 +26,29 @@
     </div>
   </div>
 </div>
-
 <modal #modal [keyboard]="false" [backdrop]="'static'">
-    <modal-header [show-close]="true">
-        <h4 class="modal-title">{{selectedBook.Title}}</h4>
-    </modal-header>
-    <modal-body>
-      <h3>Product Information</h3>
-      <h4>Price</h4>
-      <p>{{selectedBook.Price | currency:'USD':true:'1.2-2'}}</p>
-      <h4>Stock</h4>
-      <p>{{selectedBook.Stock}}</p>
-      <hr>
-      <h3>Buyer Information</h3>
-      <h4>Full Name</h4>
-      <p>{{userConstants.getUser().fullName}}</p>
-      <h4>Address</h4>
-      <p>{{userConstants.getUser().location}}</p>
-      <hr>
-      <div class="form-group">
-        <label for="Quantity">Quantity</label>
-        <input type="number" name="quantity" [(ngModel)]="order.quantity" min="1" max="{{selectedBook.Stock}}" class="form-control">
-      </div>
-    </modal-body>
-    <modal-footer [show-default-buttons]="false">
-      <input class="btn btn-primary" type="button" (click)="submitOrder()" value="Submit">
-    </modal-footer>
+  <modal-header [show-close]="true">
+    <h4 class="modal-title">{{selectedBook.Title}}</h4>
+  </modal-header>
+  <modal-body>
+    <h3>Product Information</h3>
+    <h4>Price</h4>
+    <p>{{selectedBook.Price | currency:'USD':true:'1.2-2'}}</p>
+    <h4>Stock</h4>
+    <p>{{selectedBook.Stock}}</p>
+    <hr>
+    <h3>Buyer Information</h3>
+    <h4>Full Name</h4>
+    <p>{{userConstants.getUser().fullName}}</p>
+    <h4>Address</h4>
+    <p>{{userConstants.getUser().location}}</p>
+    <hr>
+    <div class="form-group">
+      <label for="Quantity">Quantity</label>
+      <input type="number" name="quantity" [(ngModel)]="order.quantity" min="1" max="{{selectedBook.Stock}}" class="form-control">
+    </div>
+  </modal-body>
+  <modal-footer [show-default-buttons]="false">
+    <input class="btn btn-primary" type="button" (click)="submitOrder()" value="Submit">
+  </modal-footer>
 </modal>

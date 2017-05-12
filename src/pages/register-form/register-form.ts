@@ -1,5 +1,10 @@
-import { NgForm } from '@angular/forms';
-import { Component } from '@angular/core';
+import {
+  NgForm
+} from '@angular/forms';
+
+import {
+  Component
+} from '@angular/core';
 
 import {
   UserApi,

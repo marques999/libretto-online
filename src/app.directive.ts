@@ -33,7 +33,8 @@ export class EqualValidator implements Validator {
    */
   public constructor(
     @Attribute('validateEqual') public validateEqual: string,
-    @Attribute('reverse') public reverse: string) { }
+    @Attribute('reverse') public reverse: string
+  ) { }
 
   /**
    * @param {AbstractControl} c

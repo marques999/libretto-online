@@ -20,6 +20,10 @@ export type UserForm = {
   Password: string
 };
 
+/**
+ * @export
+ * @type LoginForm
+ */
 export type LoginForm = {
   Email: string,
   Password: string,

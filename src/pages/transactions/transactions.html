@@ -1,25 +1,25 @@
 <div class="container">
-    <h1>Orders</h1>
-    <table class="table table-stripped">
-        <tr>
-            <th>Book Title</th>
-            <th>Price</th>
-            <th>Quantity</th>
-            <th>Sub-Total</th>
-            <th>Status</th>
-            <th>Last Updated</th>
-            <th>Date Created</th>
-            <th style="width: 3%"></th>
-        </tr>
-        <tr *ngFor="let order of orders">
-            <th>{{ order.BookTitle }}</th>
-            <th>{{ order.Total / order.Quantity | currency:'USD':true:'1.2-2' }}</th>
-            <th>{{ order.Quantity }}</th>
-            <th>{{ order.Total | currency:'USD':true:'1.2-2'}}</th>
-            <th>{{ order.Status }}</th>
-            <th>{{ order.StatusTimestamp | date:'dd/MM/yyyy @ h:mma'}}</th>
-            <th>{{ order.Timestamp | date:'dd/MM/yyyy @ h:mma'}}</th>
-            <th><button type="button" class="btn btn-danger" (click)="cancelOrder(order)"><i class="fa fa-trash"></i></button></th>
-        </tr>
-    </table>
+  <h1>Orders</h1>
+  <table class="table table-stripped">
+    <tr>
+      <th>Book Title</th>
+      <th>Price</th>
+      <th>Quantity</th>
+      <th>Sub-Total</th>
+      <th>Status</th>
+      <th>Last Updated</th>
+      <th>Date Created</th>
+      <th style="width: 3%"></th>
+    </tr>
+    <tr *ngFor="let order of orders">
+      <th>{{order.BookTitle}}</th>
+      <th>{{order.Total / order.Quantity | currency:'USD':true:'1.2-2' }}</th>
+      <th>{{order.Quantity}}</th>
+      <th>{{order.Total | currency:'USD':true:'1.2-2'}}</th>
+      <th>{{order.Status}}</th>
+      <th>{{order.StatusTimestamp | date:'dd/MM/yyyy @ h:mma'}}</th>
+      <th>{{order.Timestamp | date:'dd/MM/yyyy @ h:mma'}}</th>
+      <th><button type="button" class="btn btn-danger" (click)="cancelOrder(order)"><i class="fa fa-trash"></i></button></th>
+    </tr>
+  </table>
 </div>

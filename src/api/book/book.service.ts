@@ -16,9 +16,11 @@ import {
   Book
 } from './book.model';
 
-import 'rxjs/add/operator/map';
+import {
+  Constants
+} from '../globals';
 
-import { Constants } from '../../globals';
+import 'rxjs/add/operator/map';
 
 /**
  * @export
@@ -32,7 +34,7 @@ export class BookApi {
    * @param {Http} api
    * @memberOf BookApi
    */
-  public constructor( @Inject(Http) private api: Http, private CONSTANTS : Constants) { }
+  public constructor(@Inject(Http) private api: Http, private CONSTANTS: Constants) { }
 
   /**
    * @returns {Observable<any>}

@@ -1,6 +1,7 @@
 import {
   OnInit,
-  Component
+  Component,
+  ViewChild
 } from '@angular/core';
 
 import {
@@ -10,15 +11,17 @@ import {
 
 import {
   Order,
-  OrderForm,
-  OrderApi
+  OrderApi,
+  OrderForm
 } from '../../api/order';
 
-import { ModalComponent } from 'ng2-bs3-modal/ng2-bs3-modal';
+import {
+   UserConstants
+} from '../../api/globals';
 
-import { ViewChild } from '@angular/core';
-
-import { UserConstants } from '../../globals';
+import {
+   ModalComponent
+} from 'ng2-bs3-modal/ng2-bs3-modal';
 
 /**
  * @export
@@ -31,6 +34,10 @@ import { UserConstants } from '../../globals';
 })
 export class HomepageComponent implements OnInit {
 
+   /**
+    * @type {ModalComponent}
+    * @memberof HomepageComponent
+    */
    @ViewChild('modal') modal: ModalComponent;
 
   /**
@@ -40,40 +47,82 @@ export class HomepageComponent implements OnInit {
    */
   private books: Book[] = [];
 
-  private selectedBook : Book = {
-      Title : '',
-      Id: '',
-      Stock: 0,
-      Price: 0
+  /**
+   * @private
+   * @type {Book}
+   * @memberof HomepageComponent
+   */
+  private selectedBook: Book = {
+    Title : '',
+    Id: '',
+    Stock: 0,
+    Price: 0
   };
 
-  private order : OrderForm = {
+  /**
+   * @private
+   * @type {OrderForm}
+   * @memberof HomepageComponent
+   */
+  private order: OrderForm = {
     bookId: '',
     quantity: 1,
     customerId: '',
     bookTitle : '',
     customerName : '',
     total: 0
-  }
+  };
 
-  private misc = {
+  /**
+   * @private
+   * @memberof HomepageComponent
+   */
+  private misc: any = {
     price : 0
-  }
+  };
 
   /**
    * Creates an instance of HomepageComponent.
    * @param {BookApi} bookApi
    * @memberOf HomepageComponent
    */
-  constructor(private bookApi: BookApi,
-              private userConstants: UserConstants,
-              private orderApi : OrderApi) { }
+  public constructor(
+    private bookApi: BookApi,
+    private userConstants: UserConstants,
+    private orderApi: OrderApi
+  ) { }
 
   /**
    * @memberOf TodoComponent
    */
   public ngOnInit(): void {
     this.refreshBooks();
+  }
+
+  /**
+   * @param {Book} selectedBook
+   * @memberof HomepageComponent
+   */
+  public openModal(selectedBook: Book) {
+    this.selectedBook = selectedBook;
+    this.order.bookId = selectedBook.Id;
+    this.order.bookTitle = selectedBook.Title;
+    this.misc.price = selectedBook.Price;
+    this.order.customerName = this.userConstants.getUser().fullName;
+    this.order.customerId = this.userConstants.getUser().id;
+    this.modal.open();
+  }
+
+  /**
+   * @memberof HomepageComponent
+   */
+  public submitOrder(): void {
+    console.log(this.order);
+    this.order.total = this.misc.price * this.order.quantity;
+    this.orderApi.insert(this.order).subscribe(
+      resp => this.modal.close(),
+      error => console.log(error)
+    );
   }
 
   /**
@@ -84,24 +133,5 @@ export class HomepageComponent implements OnInit {
     this.bookApi.getAll().subscribe((books: any ) => {
       this.books = books.GetBooksListResult;
     });
-  }
-
-  openModal(selectedBook: Book) {
-      this.selectedBook = selectedBook;
-      this.order.bookId = selectedBook.Id;
-      this.order.bookTitle = selectedBook.Title;
-      this.misc.price = selectedBook.Price;
-      this.order.customerName = this.userConstants.getUser().fullName;
-      this.order.customerId = this.userConstants.getUser().id;
-      this.modal.open();
-  }
-
-  submitOrder(): void {
-    console.log(this.order);
-    this.order.total = this.misc.price * this.order.quantity;
-    this.orderApi.insert(this.order).subscribe(
-      resp => this.modal.close(),
-      error => console.log(error)
-    );
   }
 }
