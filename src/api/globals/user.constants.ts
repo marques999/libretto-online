@@ -9,7 +9,7 @@ import {
 
 import {
   LocalStorageService
-} from '../node_modules/angular-2-local-storage';
+} from 'angular-2-local-storage';
 
 @Injectable()
 export class UserConstants {
@@ -41,7 +41,7 @@ export class UserConstants {
 
     this.user = this.localStorage.get<User>('user');
 
-    if (this.user.id) {
+    if (this.user !== undefined && this.user.id !== undefined) {
       this.userLoggedIn = true;
     }
   }
@@ -50,7 +50,7 @@ export class UserConstants {
    * @returns {User}
    * @memberof UserConstants
    */
-  public getUser() : User {
+  public getUser(): User {
     return this.user;
   }
 

@@ -13,8 +13,8 @@ import { LibrettoComponent } from './app.component';
 
 import { HeaderComponent } from './components/header';
 import { FooterComponent } from './components/footer';
-import { LocalStorageModule } from '../node_modules/angular-2-local-storage';
-import { Ng2Bs3ModalModule } from '../node_modules/ng2-bs3-modal/ng2-bs3-modal';
+import { LocalStorageModule } from 'angular-2-local-storage';
+import { Ng2Bs3ModalModule } from 'ng2-bs3-modal/ng2-bs3-modal';
 
 import {
   Constants,

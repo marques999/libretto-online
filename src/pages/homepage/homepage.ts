@@ -103,7 +103,7 @@ export class HomepageComponent implements OnInit {
    * @param {Book} selectedBook
    * @memberof HomepageComponent
    */
-  public openModal(selectedBook: Book) {
+  public openModal(selectedBook: Book): void {
     this.selectedBook = selectedBook;
     this.order.bookId = selectedBook.Id;
     this.order.bookTitle = selectedBook.Title;

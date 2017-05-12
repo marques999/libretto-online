@@ -31,7 +31,6 @@ export class TransactionsComponent implements OnInit {
    */
   private orders: Order[];
 
-
   /**
    * Creates an instance of TransactionsComponent.
    * @param {OrderApi} orderApi
@@ -57,8 +56,8 @@ export class TransactionsComponent implements OnInit {
       this.orders.map(orderInformation => {
         let epochDate = orderInformation.Timestamp.split('+')[0].substring(6);
         let epochStatusDate = orderInformation.StatusTimestamp.split('+')[0].substring(6);
-        let date = new Date(parseInt(epochDate));
-        let statusDate = new Date(parseInt(epochStatusDate));
+        let date = new Date(parseInt(epochDate, 10));
+        let statusDate = new Date(parseInt(epochStatusDate, 10));
         orderInformation.Timestamp = date.toISOString();
         orderInformation.StatusTimestamp = statusDate.toISOString();
       });
@@ -70,23 +69,23 @@ export class TransactionsComponent implements OnInit {
    * @param {Order} order
    * @memberof TransactionsComponent
    */
-  private cancelOrder(order: Order): void{
+  private cancelOrder(order: Order): void {
     let arg: OrderId = {
       Id : order.Id
-    }
+    };
     this.orderApi.remove(arg).subscribe(
       orderInformation => {
         this.orders = orderInformation;
         this.orders.map(elem => {
           let epochDate = elem.Timestamp.split('+')[0].substring(6);
           let epochStatusDate = elem.StatusTimestamp.split('+')[0].substring(6);
-          let date = new Date(parseInt(epochDate));
-          let statusDate = new Date(parseInt(epochStatusDate));
+          let date = new Date(parseInt(epochDate, 10));
+          let statusDate = new Date(parseInt(epochStatusDate, 10));
           elem.Timestamp = date.toISOString();
           elem.StatusTimestamp = statusDate.toISOString();
         });
       },
       errorInformation => console.log(errorInformation)
-    )
+    );
   }
 }

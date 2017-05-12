@@ -59,7 +59,7 @@ export class OrderApi {
    * @returns {Observable<Order[]>}
    * @memberof OrderApi
    */
-  public getOrdersByUser(id: string): Observable<Order[]>{
+  public getOrdersByUser(id: string): Observable<Order[]> {
     return this.api.get(this.CONSTANTS.getAPIEndpoint() + 'order/user/' + id).map(r => r.json());
   }
 
