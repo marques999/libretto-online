@@ -2,6 +2,10 @@
 # yarn lockfile v1
 
 
+"@angular/animations@^4.1.2":
+  version "4.1.2"
+  resolved "https://registry.yarnpkg.com/@angular/animations/-/animations-4.1.2.tgz#3371596e736b7d240e200477d0dd8c5929352124"
+
 "@angular/common@^4.0.3":
   version "4.0.3"
   resolved "https://registry.yarnpkg.com/@angular/common/-/common-4.0.3.tgz#17472895eb425f2812b3a79162b5b494d2506a5b"
@@ -2345,7 +2349,7 @@ gulp@gulpjs/gulp#4ed9a4a3275559c73a396eff7e1fde3824951ebb:
   dependencies:
     glob-watcher "^3.0.0"
     gulp-cli "^1.0.0"
-    undertaker "^1.0.0"
+    undertaker "^0.15.0"
     vinyl-fs "^2.0.0"
 
 gulplog@^1.0.0:
@@ -3562,6 +3566,10 @@ next-tick@^1.0.0:
 ng2-bs3-modal@^0.10.4:
   version "0.10.4"
   resolved "https://registry.yarnpkg.com/ng2-bs3-modal/-/ng2-bs3-modal-0.10.4.tgz#80f350cd3f7346193c8f9324c899d58db1714581"
+
+ng2-toastr@^4.0.1:
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/ng2-toastr/-/ng2-toastr-4.0.1.tgz#87d5ea60e4fd0ff3626980a3c1bd9c76dc06bfdc"
 
 ngx-bootstrap@^1.6.6:
   version "1.6.6"

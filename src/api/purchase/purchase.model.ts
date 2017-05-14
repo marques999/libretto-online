@@ -3,12 +3,12 @@
  * @type Purchase
  */
 export type Purchase = {
-  id: string,
-  book: string,
-  total: number,
-  customer: string,
-  quantity: number,
-  timestamp: Date
+  id: string;
+  book: string;
+  total: number;
+  quantity: number;
+  timestamp: Date;
+  customer: string;
 };
 
 /**
@@ -16,8 +16,8 @@ export type Purchase = {
  * @type PurchaseForm
  */
 export type PurchaseForm = {
-  id: string,
-  bookId: string,
-  quantity: number,
-  customerId: string
+  id: string;
+  bookId: string;
+  quantity: number;
+  customerId: string;
 };

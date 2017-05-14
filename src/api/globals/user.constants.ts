@@ -3,13 +3,13 @@ import {
 } from '@angular/core';
 
 import {
+  LocalStorageService
+} from 'angular-2-local-storage';
+
+import {
   User,
   UserApi
 } from '../user';
-
-import {
-  LocalStorageService
-} from 'angular-2-local-storage';
 
 @Injectable()
 export class UserConstants {
@@ -18,7 +18,7 @@ export class UserConstants {
    * @type {boolean}
    * @memberof UserConstants
    */
-  public userLoggedIn: boolean = false;
+  public loggedIn: boolean = false;
 
   /**
    * @private
@@ -41,8 +41,8 @@ export class UserConstants {
 
     this.user = this.localStorage.get<User>('user');
 
-    if (this.user !== undefined && this.user.id !== undefined) {
-      this.userLoggedIn = true;
+    if (this.user && this.user.id) {
+      this.loggedIn = true;
     }
   }
 
@@ -58,16 +58,8 @@ export class UserConstants {
    * @memberof UserConstants
    */
   public logout(): void {
-
-    this.user =  {
-      id: '',
-      email: '',
-      location: '',
-      fullName: '',
-    };
-
-    this.userLoggedIn = false;
-    this.localStorage.set('user', this.user);
+    this.loggedIn = false;
+    this.setUser('', '', '', '');
   }
 
   /**
