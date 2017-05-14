@@ -1,8 +1,17 @@
 import {
   OnInit,
   Component,
-  ViewChild
+  ViewChild,
+  ViewContainerRef
 } from '@angular/core';
+
+import {
+  ToastsManager
+} from 'ng2-toastr/ng2-toastr';
+
+import {
+  ModalComponent
+} from 'ng2-bs3-modal/ng2-bs3-modal';
 
 import {
   Book,
@@ -16,12 +25,8 @@ import {
 } from '../../api/order';
 
 import {
-   UserConstants
+  UserConstants
 } from '../../api/globals';
-
-import {
-   ModalComponent
-} from 'ng2-bs3-modal/ng2-bs3-modal';
 
 /**
  * @export
@@ -34,11 +39,11 @@ import {
 })
 export class HomepageComponent implements OnInit {
 
-   /**
-    * @type {ModalComponent}
-    * @memberof HomepageComponent
-    */
-   @ViewChild('modal') modal: ModalComponent;
+  /**
+   * @type {ModalComponent}
+   * @memberof HomepageComponent
+   */
+  @ViewChild('orderModal') modal: ModalComponent;
 
   /**
    * @private
@@ -53,7 +58,7 @@ export class HomepageComponent implements OnInit {
    * @memberof HomepageComponent
    */
   private selectedBook: Book = {
-    Title : '',
+    Title: '',
     Id: '',
     Stock: 0,
     Price: 0
@@ -68,8 +73,8 @@ export class HomepageComponent implements OnInit {
     bookId: '',
     quantity: 1,
     customerId: '',
-    bookTitle : '',
-    customerName : '',
+    bookTitle: '',
+    customerName: '',
     total: 0
   };
 
@@ -78,19 +83,27 @@ export class HomepageComponent implements OnInit {
    * @memberof HomepageComponent
    */
   private misc: any = {
-    price : 0
+    price: 0
   };
 
   /**
    * Creates an instance of HomepageComponent.
    * @param {BookApi} bookApi
-   * @memberOf HomepageComponent
+   * @param {OrderApi} orderApi
+   * @param {ToastsManager} toaster
+   * @param {UserConstants} userConstants
+   * @param {ViewContainerRef} viewContainer
+   * @memberof HomepageComponent
    */
   public constructor(
     private bookApi: BookApi,
+    private orderApi: OrderApi,
+    private toaster: ToastsManager,
     private userConstants: UserConstants,
-    private orderApi: OrderApi
-  ) { }
+    private viewContainer: ViewContainerRef
+  ) {
+    this.toaster.setRootViewContainerRef(viewContainer);
+  }
 
   /**
    * @memberOf TodoComponent
@@ -117,12 +130,14 @@ export class HomepageComponent implements OnInit {
    * @memberof HomepageComponent
    */
   public submitOrder(): void {
-    console.log(this.order);
+    this.toaster.info(JSON.stringify(this.order), 'submitOrder()::request');
     this.order.total = this.misc.price * this.order.quantity;
-    this.orderApi.insert(this.order).subscribe(
-      resp => this.modal.close(),
-      error => console.log(error)
-    );
+    this.orderApi.insert(this.order).subscribe((orderInformation: any) => {
+      this.modal.close();
+      this.toaster.info(JSON.stringify(orderInformation), 'submitOrder()::response');
+    }, (ex: any) => {
+      this.toaster.error(ex.message, ex.title);
+    });
   }
 
   /**
@@ -130,8 +145,10 @@ export class HomepageComponent implements OnInit {
    * @memberOf HomepageComponent
    */
   private refreshBooks(): void {
-    this.bookApi.getAll().subscribe((books: any ) => {
+    this.bookApi.getAll().subscribe((books: any) => {
       this.books = books.GetBooksListResult;
+    }, (ex: any) => {
+      this.toaster.error(ex.message, ex.title);
     });
   }
 }

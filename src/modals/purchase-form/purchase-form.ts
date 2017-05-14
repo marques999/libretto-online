@@ -1,7 +1,11 @@
 import {
-  OnInit,
-  Component
+  Component,
+  ViewContainerRef
 } from '@angular/core';
+
+import {
+  ToastsManager
+} from 'ng2-toastr/ng2-toastr';
 
 import {
   PurchaseApi,
@@ -24,22 +28,33 @@ export class PurchaseFormComponent {
    * @type {Purchase}
    * @memberOf PurchaseFormComponent
    */
-  private purchaseInformation: PurchaseForm;
+  private purchaseForm: PurchaseForm;
 
   /**
    * Creates an instance of PurchaseFormComponent.
+   * @param {ToastsManager} toaster
    * @param {PurchaseApi} purchaseApi
-   * @memberOf PurchaseFormComponent
+   * @param {ViewContainerRef} viewContainer
+   * @memberof PurchaseFormComponent
    */
-  public constructor(private purchaseApi: PurchaseApi) { }
+  public constructor(
+    private toaster: ToastsManager,
+    private purchaseApi: PurchaseApi,
+    private viewContainer: ViewContainerRef
+  ) {
+    this.toaster.setRootViewContainerRef(viewContainer);
+  }
 
   /**
    * @private
    * @memberOf PurchaseFormComponent
    */
   private makePurchase(): void {
-    this.purchaseApi.insert(this.purchaseInformation).subscribe((purchaseInformation) => {
-      console.log('makePurchase()');
+    this.toaster.info(JSON.stringify(this.purchaseForm), 'makePurchase()::request');
+    this.purchaseApi.insert(this.purchaseForm).subscribe((purchaseInformation: any) => {
+      this.toaster.info(JSON.stringify(purchaseInformation), 'makePurchase()::response');
+    }, (ex: any) => {
+      this.toaster.error(ex.mesage, ex.title);
     });
   }
 }

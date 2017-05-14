@@ -1,13 +1,18 @@
 import {
   OnInit,
-  Component
+  Component,
+  ViewContainerRef
 } from '@angular/core';
+
+import {
+  ToastsManager
+} from 'ng2-toastr/ng2-toastr';
 
 import {
   Order,
   OrderId,
   OrderApi
-} from '../../api/order/';
+} from '../../api/order';
 
 import {
   UserConstants
@@ -34,10 +39,19 @@ export class TransactionsComponent implements OnInit {
   /**
    * Creates an instance of TransactionsComponent.
    * @param {OrderApi} orderApi
+   * @param {ToastsManager} toaster
    * @param {UserConstants} userInfo
+   * @param {ViewContainerRef} viewContainer
    * @memberof TransactionsComponent
    */
-  public constructor(private orderApi: OrderApi, private userInfo: UserConstants) { }
+  public constructor(
+    private orderApi: OrderApi,
+    private toaster: ToastsManager,
+    private userInfo: UserConstants,
+    private viewContainer: ViewContainerRef
+  ) {
+    this.toaster.setRootViewContainerRef(viewContainer);
+  }
 
   /**
    * @memberOf TodoComponent
@@ -53,7 +67,8 @@ export class TransactionsComponent implements OnInit {
   private refreshOrders(): void {
     this.orderApi.getOrdersByUser(this.userInfo.getUser().id).subscribe((orders: any) => {
       this.orders = orders;
-      this.orders.map(orderInformation => {
+      this.toaster.info(orders, 'refreshOrders()');
+      this.orders.map((orderInformation: any) => {
         let epochDate = orderInformation.Timestamp.split('+')[0].substring(6);
         let epochStatusDate = orderInformation.StatusTimestamp.split('+')[0].substring(6);
         let date = new Date(parseInt(epochDate, 10));
@@ -61,8 +76,11 @@ export class TransactionsComponent implements OnInit {
         orderInformation.Timestamp = date.toISOString();
         orderInformation.StatusTimestamp = statusDate.toISOString();
       });
-    }, errorInformation => console.log(errorInformation));
+    }, (ex: any) => {
+      this.toaster.error(ex.mesage, ex.title);
+    });
   }
+
 
   /**
    * @private
@@ -71,21 +89,22 @@ export class TransactionsComponent implements OnInit {
    */
   private cancelOrder(order: Order): void {
     let arg: OrderId = {
-      Id : order.Id
+      Id: order.Id
     };
-    this.orderApi.remove(arg).subscribe(
-      orderInformation => {
-        this.orders = orderInformation;
-        this.orders.map(elem => {
-          let epochDate = elem.Timestamp.split('+')[0].substring(6);
-          let epochStatusDate = elem.StatusTimestamp.split('+')[0].substring(6);
-          let date = new Date(parseInt(epochDate, 10));
-          let statusDate = new Date(parseInt(epochStatusDate, 10));
-          elem.Timestamp = date.toISOString();
-          elem.StatusTimestamp = statusDate.toISOString();
-        });
-      },
-      errorInformation => console.log(errorInformation)
-    );
+    this.toaster.info(JSON.stringify(arg), 'cancelOrder()::request');
+    this.orderApi.remove(arg).subscribe((orderInformation: any) => {
+      this.orders = orderInformation;
+      this.toaster.info(orderInformation, 'cancelOrder()::response');
+      this.orders.map(elem => {
+        let epochDate = elem.Timestamp.split('+')[0].substring(6);
+        let epochStatusDate = elem.StatusTimestamp.split('+')[0].substring(6);
+        let date = new Date(parseInt(epochDate, 10));
+        let statusDate = new Date(parseInt(epochStatusDate, 10));
+        elem.Timestamp = date.toISOString();
+        elem.StatusTimestamp = statusDate.toISOString();
+      });
+    }, (ex: any) => {
+      this.toaster.error(ex.mesage, ex.title);
+    });
   }
 }
