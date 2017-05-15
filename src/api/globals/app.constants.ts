@@ -15,7 +15,8 @@ export class Constants {
    */
   private _endpoint: string = 'http://localhost:8733/Design_Time_Addresses/LibrettoWebstore/ServicesProvider.svc/';
 
-  private _status: string[] = ['Processing', 'Dispatched', 'Waiting'];
+  //'murica
+  private _status: string[] = ['Waiting', 'Processing','Dispatched', 'Canceled'];
 
   /**
    * @returns {string}
