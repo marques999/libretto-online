@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "pretty": true,
+    "target": "es5",
     "newLine": "LF",
     "sourceMap": true,
     "noImplicitAny": true,

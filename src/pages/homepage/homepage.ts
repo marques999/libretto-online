@@ -1,8 +1,17 @@
 import {
   OnInit,
   Component,
-  ViewChild
+  ViewChild,
+  ViewContainerRef
 } from '@angular/core';
+
+import {
+  ToastsManager
+} from 'ng2-toastr/ng2-toastr';
+
+import {
+  ModalComponent
+} from 'ng2-bs3-modal/ng2-bs3-modal';
 
 import {
   Book,
@@ -16,17 +25,17 @@ import {
 } from '../../api/order';
 
 import {
+<<<<<<< HEAD
   Purchase,
   PurchaseApi
 } from '../../api/purchase';
 
 import {
    UserConstants
+=======
+  UserConstants
+>>>>>>> 261f59723b8b315e3d122c95c4999f5381140732
 } from '../../api/globals';
-
-import {
-   ModalComponent
-} from 'ng2-bs3-modal/ng2-bs3-modal';
 
 /**
  * @export
@@ -39,11 +48,11 @@ import {
 })
 export class HomepageComponent implements OnInit {
 
-   /**
-    * @type {ModalComponent}
-    * @memberof HomepageComponent
-    */
-   @ViewChild('modal') modal: ModalComponent;
+  /**
+   * @type {ModalComponent}
+   * @memberof HomepageComponent
+   */
+  @ViewChild('orderModal') modal: ModalComponent;
 
   /**
    * @private
@@ -58,7 +67,7 @@ export class HomepageComponent implements OnInit {
    * @memberof HomepageComponent
    */
   private selectedBook: Book = {
-    Title : '',
+    Title: '',
     Id: '',
     Stock: 0,
     Price: 0
@@ -73,8 +82,8 @@ export class HomepageComponent implements OnInit {
     bookId: '',
     quantity: 1,
     customerId: '',
-    bookTitle : '',
-    customerName : '',
+    bookTitle: '',
+    customerName: '',
     total: 0
   };
 
@@ -83,21 +92,33 @@ export class HomepageComponent implements OnInit {
    * @memberof HomepageComponent
    */
   private misc: any = {
+<<<<<<< HEAD
     price : 0,
     orderType: 'purchase',
+=======
+    price: 0
+>>>>>>> 261f59723b8b315e3d122c95c4999f5381140732
   };
 
   /**
    * Creates an instance of HomepageComponent.
    * @param {BookApi} bookApi
-   * @memberOf HomepageComponent
+   * @param {OrderApi} orderApi
+   * @param {ToastsManager} toaster
+   * @param {UserConstants} userConstants
+   * @param {ViewContainerRef} viewContainer
+   * @memberof HomepageComponent
    */
   public constructor(
     private bookApi: BookApi,
-    private userConstants: UserConstants,
     private orderApi: OrderApi,
-    private purchaseApi: PurchaseApi
-  ) { }
+    private toaster: ToastsManager,
+    private userConstants: UserConstants,
+    private purchaseApi: PurchaseApi,
+    private viewContainer: ViewContainerRef
+  ) {
+    this.toaster.setRootViewContainerRef(viewContainer);
+  }
 
   /**
    * @memberOf TodoComponent
@@ -124,17 +145,28 @@ export class HomepageComponent implements OnInit {
    * @memberof HomepageComponent
    */
   public submitOrder(): void {
-    console.log(this.order);
+    this.toaster.info(JSON.stringify(this.order), 'submitOrder()::request');
     this.order.total = this.misc.price * this.order.quantity;
+
     if(this.misc.orderType == 'purchase'){
       this.purchaseApi.insert(this.order).subscribe(
-        resp => this.modal.close(),
-        error => console.log(error)
+        resp => {
+          this.modal.close();
+          this.toaster.info(JSON.stringify(resp), 'submitOrder()::response');
+        },
+        error => {
+          this.toaster.error(error.message, error.title);
+        }
       );
     }else if(this.misc.orderType == 'order'){
       this.orderApi.insert(this.order).subscribe(
-        resp => this.modal.close(),
-        error => console.log(error)
+        resp => {
+          this.modal.close();
+          this.toaster.info(JSON.stringify(resp), 'submitOrder()::response');
+        },
+        error => {
+          this.toaster.error(error.message, error.title);
+        }
       );
     }
   }
@@ -144,8 +176,10 @@ export class HomepageComponent implements OnInit {
    * @memberOf HomepageComponent
    */
   private refreshBooks(): void {
-    this.bookApi.getAll().subscribe((books: any ) => {
+    this.bookApi.getAll().subscribe((books: any) => {
       this.books = books.GetBooksListResult;
+    }, (ex: any) => {
+      this.toaster.error(ex.message, ex.title);
     });
   }
 }

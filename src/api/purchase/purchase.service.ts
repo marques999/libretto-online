@@ -49,6 +49,7 @@ export class PurchaseApi {
    */
   public constructor( @Inject(Http) private api: Http, private CONSTANTS : Constants) { }
 
+
   /**
    * @returns {Observable<any>}
    * @memberOf PurchaseApi
@@ -68,6 +69,7 @@ export class PurchaseApi {
 
   public getPurchasesByUser(userId : string): Observable<Purchase[]>{
     return this.api.get(this.CONSTANTS.getAPIEndpoint() + 'purchase/user/' + userId).map(r => r.json());
+
   }
 
   /**
@@ -80,7 +82,7 @@ export class PurchaseApi {
     headers.append('Content-Type', 'application/json');
     return this.api.post(this.CONSTANTS.getAPIEndpoint() + 'purchases/add', JSON.stringify(purchaseInformation), {
       headers
-    }).map(r => r.json());
+    }).map(r => r.json()).catch(this.handleError);
   }
 
   public remove(orderId: PurchaseId): Observable<any> {
@@ -88,4 +90,24 @@ export class PurchaseApi {
     headers.append('Content-Type', 'application/json');
     return this.api.post(this.CONSTANTS.getAPIEndpoint() + 'purchases/delete', JSON.stringify(orderId), {headers}).map(r => r.json());
   }
+  /**
+   * @private
+   * @param {(Response | any)} ex
+   * @returns {Observable<any>}
+   * @memberof UserApi
+   */
+  private handleError(ex: Response | any): Observable<any> {
+    if (ex instanceof Response) {
+      return Observable.fromPromise(ex.json()).flatMap(responseBody => {
+        return Observable.throw({
+          message: responseBody.error || JSON.stringify(responseBody),
+          title: ex.status && ex.statusText ? `[${ex.status}] ${ex.statusText}` : 'purchase.service.ts'
+        });
+      });
+    }
+    return Observable.throw({
+      title: 'purchase.service.ts',
+      message: ex.message ? ex.message : ex.toString()
+    });
+  };
 }

@@ -26,6 +26,7 @@ export type PurchaseForm = {
   customerName: string,
   bookTitle: string,
   total: number
+  id: string;
 };
 
 export type PurchaseId = {

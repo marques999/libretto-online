@@ -4,8 +4,6 @@ import {
 
 @Component({
   selector: 'fountain-root',
-  template: `<fountain-header></fountain-header>
-  <router-outlet></router-outlet>
-  <fountain-footer></fountain-footer>`
+  template: `<fountain-header></fountain-header><router-outlet></router-outlet>`
 })
 export class LibrettoComponent { }
