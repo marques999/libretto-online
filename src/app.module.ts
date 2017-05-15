@@ -109,7 +109,6 @@ import { HeaderComponent
     HeaderComponent,
     LibrettoComponent,
     HomepageComponent,
-    LoginFormComponent,
     TransactionsComponent,
     StatusFormatPipe
   ],

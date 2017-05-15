@@ -25,16 +25,12 @@ import {
 } from '../../api/order';
 
 import {
-<<<<<<< HEAD
   Purchase,
   PurchaseApi
 } from '../../api/purchase';
 
 import {
    UserConstants
-=======
-  UserConstants
->>>>>>> 261f59723b8b315e3d122c95c4999f5381140732
 } from '../../api/globals';
 
 /**
@@ -92,12 +88,8 @@ export class HomepageComponent implements OnInit {
    * @memberof HomepageComponent
    */
   private misc: any = {
-<<<<<<< HEAD
     price : 0,
     orderType: 'purchase',
-=======
-    price: 0
->>>>>>> 261f59723b8b315e3d122c95c4999f5381140732
   };
 
   /**

@@ -41,6 +41,15 @@ export class UserConstants {
 
     this.user = this.localStorage.get<User>('user');
 
+    if(this.user == null){
+      this.user = {
+        id: '',
+        email: '',
+        location: '',
+        fullName: '',
+      }   
+    }
+
     if (this.user && this.user.id) {
       this.loggedIn = true;
     }
@@ -70,6 +79,8 @@ export class UserConstants {
    * @memberof UserConstants
    */
   public setUser(email: string, location: string, name: string, id: string): void {
+    console.log("HERER");
+    console.log(this.user);
     this.user.id = id;
     this.user.email = email;
     this.user.fullName = name;
