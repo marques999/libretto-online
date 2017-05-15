@@ -41,6 +41,10 @@ import {
   TransactionsComponent
 } from './pages/transactions';
 
+import {
+  StatusFormatPipe
+} from './pipes';
+
 @NgModule({
   imports: [
     HttpModule,
@@ -74,7 +78,8 @@ import {
     RegisterFormComponent,
     HomepageComponent,
     LoginFormComponent,
-    TransactionsComponent
+    TransactionsComponent,
+    StatusFormatPipe
   ],
   bootstrap: [
     LibrettoComponent

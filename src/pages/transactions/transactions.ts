@@ -10,8 +10,15 @@ import {
 } from '../../api/order/';
 
 import {
-  UserConstants
+  UserConstants,
+  Constants
 } from '../../api/globals';
+
+import {
+  Purchase,
+  PurchaseApi,
+  PurchaseId
+} from '../../api/purchase/';
 
 /**
  * @export
@@ -31,19 +38,25 @@ export class TransactionsComponent implements OnInit {
    */
   private orders: Order[];
 
+  private purchases: Purchase[];
+
   /**
    * Creates an instance of TransactionsComponent.
    * @param {OrderApi} orderApi
    * @param {UserConstants} userInfo
    * @memberof TransactionsComponent
    */
-  public constructor(private orderApi: OrderApi, private userInfo: UserConstants) { }
+  public constructor(private orderApi: OrderApi, 
+                    private userInfo: UserConstants,
+                    private constants : Constants,
+                    private purchaseApi: PurchaseApi) { }
 
   /**
    * @memberOf TodoComponent
    */
   public ngOnInit(): void {
     this.refreshOrders();
+    this.refreshPurchases();
   }
 
   /**
@@ -60,6 +73,17 @@ export class TransactionsComponent implements OnInit {
         let statusDate = new Date(parseInt(epochStatusDate, 10));
         orderInformation.Timestamp = date.toISOString();
         orderInformation.StatusTimestamp = statusDate.toISOString();
+      });
+    }, errorInformation => console.log(errorInformation));
+  }
+
+  private refreshPurchases(): void {
+    this.purchaseApi.getPurchasesByUser(this.userInfo.getUser().id).subscribe((purchases: any) => {
+      this.purchases = purchases;
+      this.purchases.map(purchaseInformation => {
+        let epochDate = purchaseInformation.Timestamp.split('+')[0].substring(6);
+        let date = new Date(parseInt(epochDate, 10));
+        purchaseInformation.Timestamp = date.toISOString();
       });
     }, errorInformation => console.log(errorInformation));
   }
@@ -87,5 +111,29 @@ export class TransactionsComponent implements OnInit {
       },
       errorInformation => console.log(errorInformation)
     );
+  }
+
+  private cancelPurchase(purchase : Purchase): void{
+    let arg: PurchaseId = {
+      Id: purchase.Id
+    };
+    this.purchaseApi.remove(arg).subscribe(
+      purchaseInformation => {
+        this.purchases = purchaseInformation;
+        console.log(this.purchases);
+        this.purchases.map(elem => {
+          console.log(elem);
+          let epochDate = elem.Timestamp.split('+')[0].substring(6);
+          let date = new Date(parseInt(epochDate, 10));
+          elem.Timestamp = date.toISOString();
+        });
+      },
+      errorInformation => console.log(errorInformation)
+    );
+
+  }
+
+  private formatStatus(index : number): string{
+    return this.constants.getStatus(index - 1);
   }
 }

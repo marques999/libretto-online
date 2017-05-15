@@ -16,6 +16,11 @@ import {
 } from '../../api/order';
 
 import {
+  Purchase,
+  PurchaseApi
+} from '../../api/purchase';
+
+import {
    UserConstants
 } from '../../api/globals';
 
@@ -78,7 +83,8 @@ export class HomepageComponent implements OnInit {
    * @memberof HomepageComponent
    */
   private misc: any = {
-    price : 0
+    price : 0,
+    orderType: 'purchase',
   };
 
   /**
@@ -89,7 +95,8 @@ export class HomepageComponent implements OnInit {
   public constructor(
     private bookApi: BookApi,
     private userConstants: UserConstants,
-    private orderApi: OrderApi
+    private orderApi: OrderApi,
+    private purchaseApi: PurchaseApi
   ) { }
 
   /**
@@ -119,10 +126,17 @@ export class HomepageComponent implements OnInit {
   public submitOrder(): void {
     console.log(this.order);
     this.order.total = this.misc.price * this.order.quantity;
-    this.orderApi.insert(this.order).subscribe(
-      resp => this.modal.close(),
-      error => console.log(error)
-    );
+    if(this.misc.orderType == 'purchase'){
+      this.purchaseApi.insert(this.order).subscribe(
+        resp => this.modal.close(),
+        error => console.log(error)
+      );
+    }else if(this.misc.orderType == 'order'){
+      this.orderApi.insert(this.order).subscribe(
+        resp => this.modal.close(),
+        error => console.log(error)
+      );
+    }
   }
 
   /**

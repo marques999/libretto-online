@@ -12,7 +12,7 @@
       <div class="row">
         <div *ngFor="let book of books" class="col-sm-4 col-lg-4 col-md-4">
           <div class="thumbnail">
-            <img src="http://placehold.it/320x150" alt="">
+            <img src="http://lorempixel.com/400/200/" alt="">
             <div class="caption">
               <h4 class="pull-right">{{book.Price | currency:'USD':true:'1.2-2'}}</h4>
               <h4>
@@ -43,6 +43,13 @@
     <h4>Address</h4>
     <p>{{userConstants.getUser().location}}</p>
     <hr>
+    <div class="form-group">
+      <label for="ordertype">Transaction Type</label>
+      <select [(ngModel)]="misc.orderType" class="form-control">
+        <option value="order">Order</option>
+        <option value="purchase">Purchase</option>
+      </select>
+    </div>
     <div class="form-group">
       <label for="Quantity">Quantity</label>
       <input type="number" name="quantity" [(ngModel)]="order.quantity" min="1" max="{{selectedBook.Stock}}" class="form-control">

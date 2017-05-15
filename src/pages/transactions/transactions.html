@@ -16,10 +16,29 @@
       <th>{{order.Total / order.Quantity | currency:'USD':true:'1.2-2' }}</th>
       <th>{{order.Quantity}}</th>
       <th>{{order.Total | currency:'USD':true:'1.2-2'}}</th>
-      <th>{{order.Status}}</th>
+      <th>{{formatStatus(order.Status)}}</th>
       <th>{{order.StatusTimestamp | date:'dd/MM/yyyy @ h:mma'}}</th>
       <th>{{order.Timestamp | date:'dd/MM/yyyy @ h:mma'}}</th>
       <th><button type="button" class="btn btn-danger" (click)="cancelOrder(order)"><i class="fa fa-trash"></i></button></th>
+    </tr>
+  </table>
+  <h1>Purchases</h1>
+  <table class="table table-stripped">
+    <tr>
+      <th>Book Title</th>
+      <th>Price</th>
+      <th>Quantity</th>
+      <th>Sub-Total</th>
+      <th>Date Created</th>
+      <!--<th style="width: 3%"></th>-->
+    </tr>
+    <tr *ngFor="let purchase of purchases">
+      <th>{{purchase.BookTitle}}</th>
+      <th>{{purchase.Total / purchase.Quantity | currency:'USD':true:'1.2-2' }}</th>
+      <th>{{purchase.Quantity}}</th>
+      <th>{{purchase.Total | currency:'USD':true:'1.2-2'}}</th>
+      <th>{{purchase.Timestamp | date:'dd/MM/yyyy @ h:mma'}}</th>
+      <!--<th><button type="button" class="btn btn-danger" (click)="cancelPurchase(purchase)"><i class="fa fa-trash"></i></button></th>-->
     </tr>
   </table>
 </div>
